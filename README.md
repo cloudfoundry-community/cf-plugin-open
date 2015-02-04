@@ -1,16 +1,26 @@
-# Overview
+Overview
+========
 
 Open app url in browser
 
-## installation
+Installation
+------------
 
 ```
 $ go get github.com/cloudfoundry-community/cf-plugin-open
 $ cf install-plugin $GOPATH/bin/open
 ```
 
-## usage
+Usage
+-----
 
 ```
 $ cf open <appname>
+```
+
+Development
+-----------
+
+```
+cf uninstall-plugin open; go get ./...; cf install-plugin $GOPATH/bin/cf-plugin-open
 ```
