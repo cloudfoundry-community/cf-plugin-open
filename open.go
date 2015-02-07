@@ -27,6 +27,7 @@ type OpenPlugin struct{}
 
 // Run of seeder plugin
 func (plugin OpenPlugin) Run(cliConnection plugin.CliConnection, args []string) {
+	checkArgs(cliConnection, args)
 	if args[0] == "open" {
 		plugin.runAppOpen(cliConnection, args)
 	} else if args[0] == "service-open" {
@@ -95,5 +96,19 @@ func (plugin OpenPlugin) runServiceOpen(cliConnection plugin.CliConnection, args
 		fmt.Println("No dashboard available")
 	} else {
 		open.Run(url)
+	}
+}
+
+//Checks if app or service is provided
+func checkArgs(cliConnection plugin.CliConnection, args []string){
+	if len(args) < 2 {
+		if args[0] == "open" {
+			fmt.Fprintln(os.Stdout, "error: app was not provided")
+			cliConnection.CliCommand("open", "-h")
+		} else if args[0] == "service-open" {
+			fmt.Fprintln(os.Stdout, "error: service was not provided")
+			cliConnection.CliCommand("service-open", "-h")
+		}
+		os.Exit(1)
 	}
 }
