@@ -1,13 +1,10 @@
 package main
 
 import (
-    //"errors"
     "testing"
 
     "github.com/cloudfoundry/cli/plugin/fakes"
     . "github.com/smartystreets/goconvey/convey"
-    //io_helpers "github.com/cloudfoundry/cli/testhelpers/io"
-    //. "github.com/cloudfoundry-community/cli-plugin-open"
   )
 
 var (
