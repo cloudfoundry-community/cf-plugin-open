@@ -44,10 +44,16 @@ func (OpenPlugin) GetMetadata() plugin.PluginMetadata {
 			{
 				Name:     "open",
 				HelpText: "open app url in browser",
+				UsageDetails: plugin.Usage{
+					Usage: "open <appname>",
+				},
 			},
 			{
 				Name:     "service-open",
 				HelpText: "open service instance dashboard in browser",
+				UsageDetails: plugin.Usage{
+					Usage: "service-open <servicename>",
+				},
 			},
 		},
 	}
@@ -100,14 +106,11 @@ func (plugin OpenPlugin) runServiceOpen(cliConnection plugin.CliConnection, args
 }
 
 func checkArgs(cliConnection plugin.CliConnection, args []string){
-	if len(args) < 2 {
+	if len(args) < 2  {
 		if args[0] == "open" {
-			fmt.Fprintln(os.Stdout, "error: app was not provided")
-			cliConnection.CliCommand("open", "-h")
+			cliConnection.CliCommand(args[0], "-h")
 		} else if args[0] == "service-open" {
-			fmt.Fprintln(os.Stdout, "error: service was not provided")
-			cliConnection.CliCommand("service-open", "-h")
+			cliConnection.CliCommand(args[0], "-h")
 		}
-		os.Exit(1)
 	}
 }
