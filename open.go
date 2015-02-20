@@ -2,10 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
-	"errors"
+
 	"github.com/cloudfoundry/cli/plugin"
 	"github.com/skratchdot/open-golang/open"
 )
@@ -29,7 +30,7 @@ type OpenPlugin struct{}
 func (plugin OpenPlugin) Run(cliConnection plugin.CliConnection, args []string) {
 	err := checkArgs(cliConnection, args)
 	if err != nil {
-		os.Exit(1);
+		os.Exit(1)
 	}
 	if args[0] == "open" {
 		plugin.runAppOpen(cliConnection, args)
@@ -69,7 +70,7 @@ func (plugin OpenPlugin) runAppOpen(cliConnection plugin.CliConnection, args []s
 		os.Exit(1)
 	}
 	var url string
-  url, err = getUrlFromOutput(output)
+	url, err = getUrlFromOutput(output)
 	if err != nil {
 		fmt.Fprintln(os.Stdout, "error: ", err)
 		os.Exit(1)
@@ -79,19 +80,19 @@ func (plugin OpenPlugin) runAppOpen(cliConnection plugin.CliConnection, args []s
 }
 
 func getUrlFromOutput(output []string) (string, error) {
-  var url string
+	var url string
 	for _, line := range output {
 		splitLine := strings.Split(strings.TrimSpace(line), " ")
 		if splitLine[0] == "urls:" {
 			if len(splitLine) > 1 {
 				url = "http://" + strings.Trim(splitLine[1], ",")
 				url = strings.TrimSpace(url)
-			}else if len(splitLine) == 1 {
-        return "", errors.New("App has no route")
-      }
+			} else if len(splitLine) == 1 {
+				return "", errors.New("App has no route")
+			}
 		}
 	}
-  return url, nil
+	return url, nil
 }
 
 func (plugin OpenPlugin) runServiceOpen(cliConnection plugin.CliConnection, args []string) {
@@ -123,8 +124,8 @@ func (plugin OpenPlugin) runServiceOpen(cliConnection plugin.CliConnection, args
 	}
 }
 
-func checkArgs(cliConnection plugin.CliConnection, args []string) error{
-	if len(args) < 2  {
+func checkArgs(cliConnection plugin.CliConnection, args []string) error {
+	if len(args) < 2 {
 		if args[0] == "open" {
 			cliConnection.CliCommand(args[0], "-h")
 			return errors.New("Appname is needed")
