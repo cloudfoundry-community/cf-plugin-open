@@ -1,4 +1,4 @@
-Overview
+Overview [![Build Status](https://travis-ci.org/cloudfoundry-community/cf-plugin-open.svg?branch=master)](https://travis-ci.org/cloudfoundry-community/cf-plugin-open)
 ========
 
 Open app url in browser

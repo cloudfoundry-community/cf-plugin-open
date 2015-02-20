@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
+	"errors"
 	"github.com/cloudfoundry/cli/plugin"
 	"github.com/skratchdot/open-golang/open"
 )
@@ -27,6 +27,10 @@ type OpenPlugin struct{}
 
 // Run of seeder plugin
 func (plugin OpenPlugin) Run(cliConnection plugin.CliConnection, args []string) {
+	err := checkArgs(cliConnection, args)
+	if err != nil {
+		os.Exit(1);
+	}
 	if args[0] == "open" {
 		plugin.runAppOpen(cliConnection, args)
 	} else if args[0] == "service-open" {
@@ -43,10 +47,16 @@ func (OpenPlugin) GetMetadata() plugin.PluginMetadata {
 			{
 				Name:     "open",
 				HelpText: "open app url in browser",
+				UsageDetails: plugin.Usage{
+					Usage: "open <appname>",
+				},
 			},
 			{
 				Name:     "service-open",
 				HelpText: "open service instance dashboard in browser",
+				UsageDetails: plugin.Usage{
+					Usage: "service-open <servicename>",
+				},
 			},
 		},
 	}
@@ -96,4 +106,17 @@ func (plugin OpenPlugin) runServiceOpen(cliConnection plugin.CliConnection, args
 	} else {
 		open.Run(url)
 	}
+}
+
+func checkArgs(cliConnection plugin.CliConnection, args []string) error{
+	if len(args) < 2  {
+		if args[0] == "open" {
+			cliConnection.CliCommand(args[0], "-h")
+			return errors.New("Appname is needed")
+		} else if args[0] == "service-open" {
+			cliConnection.CliCommand(args[0], "-h")
+			return errors.New("Appname is needed")
+		}
+	}
+	return nil
 }
