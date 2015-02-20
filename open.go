@@ -72,11 +72,19 @@ func (plugin OpenPlugin) runAppOpen(cliConnection plugin.CliConnection, args []s
 	for _, line := range output {
 		splitLine := strings.Split(strings.TrimSpace(line), " ")
 		if splitLine[0] == "urls:" {
-			url = "http://" + strings.Trim(splitLine[1], ",")
-			url = strings.TrimSpace(url)
+			if len(splitLine) > 1 {
+				url = "http://" + strings.Trim(splitLine[1], ",")
+				url = strings.TrimSpace(url)
+			}
 		}
 	}
+	err = checkRoutes(url)
+	if err != nil {
+		fmt.Fprintln(os.Stdout, err)
+		os.Exit(1)
+	}
 	open.Run(url)
+
 }
 
 func (plugin OpenPlugin) runServiceOpen(cliConnection plugin.CliConnection, args []string) {
@@ -119,4 +127,11 @@ func checkArgs(cliConnection plugin.CliConnection, args []string) error{
 		}
 	}
 	return nil
+}
+
+func checkRoutes(url string) error{
+	if len(url) > 0 {
+		return nil
+	}
+	return errors.New("error: app does not have any routes")
 }
