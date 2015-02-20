@@ -14,12 +14,17 @@ var (
 func TestNoApp(t *testing.T){
   setup()
   Convey("checkArgs should call 0 commands", t, func() {
-    checkArgs(cliConn, []string{"open", "test"})
-    So(cliConn.CliCommandCallCount(), ShouldEqual, 0)
+    err := checkArgs(cliConn, []string{"open", "test"})
+    So(err, ShouldBeNil)
     })
   Convey("checkArgs should call 1 commands when calling open", t, func() {
-    checkArgs(cliConn, []string{"open"})
-    So(cliConn.CliCommandCallCount(), ShouldEqual, 1)
+    err := checkArgs(cliConn, []string{"open"})
+    So(err, ShouldNotBeNil)
+    })
+
+  Convey("checkArgs should call 1 commands when calling open-service", t, func() {
+    err := checkArgs(cliConn, []string{"service-open"})
+    So(err, ShouldNotBeNil)
     })
 }
 
