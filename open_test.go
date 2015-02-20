@@ -36,13 +36,17 @@ func TestNoApp(t *testing.T){
 
 func TestNoRoutes(t *testing.T){
   Convey("checkRoutes should return nil if route exists", t, func(){
-    err := checkRoutes("http:/google.com")
+    input := []string{"urls: google.com"}
+    out, err := getUrlFromOutput(input)
     So(err, ShouldBeNil)
+    So(out, ShouldEqual, "http://google.com")
     })
 
   Convey("checkRoutes should return error if no route exists", t, func(){
-    err := checkRoutes("")
+    input := []string{"urls: "}
+    out, err := getUrlFromOutput(input)
     So(err, ShouldNotBeNil)
+    So(out, ShouldEqual, "")
     })
 }
 
