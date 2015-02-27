@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"io"
 
 	"github.com/cloudfoundry/cli/plugin"
 	"github.com/skratchdot/open-golang/open"
@@ -69,30 +70,53 @@ func (plugin OpenPlugin) runAppOpen(cliConnection plugin.CliConnection, args []s
 		fmt.Fprintln(os.Stdout, "error: app does not exist")
 		os.Exit(1)
 	}
-	var url string
-	url, err = getUrlFromOutput(output)
+	url, err := getUrlFromOutput(output)
 	if err != nil {
 		fmt.Fprintln(os.Stdout, "error: ", err)
 		os.Exit(1)
 	}
-	open.Run(url)
+
+	open.Run(multiRoutesMenu(os.Stdin, url))
 
 }
 
-func getUrlFromOutput(output []string) (string, error) {
-	var url string
+func getUrlFromOutput(output []string) ([]string, error) {
+	urls := []string{}
 	for _, line := range output {
 		splitLine := strings.Split(strings.TrimSpace(line), " ")
 		if splitLine[0] == "urls:" {
 			if len(splitLine) > 1 {
-				url = "http://" + strings.Trim(splitLine[1], ",")
-				url = strings.TrimSpace(url)
+				for p := 1; p < len(splitLine); p++ {
+					url := "http://" + strings.Trim(splitLine[p], ",")
+					url = strings.TrimSpace(url)
+					urls = append(urls, url)
+				}
+
 			} else if len(splitLine) == 1 {
-				return "", errors.New("App has no route")
+				return []string{""}, errors.New("App has no route")
 			}
 		}
 	}
-	return url, nil
+	return urls, nil
+}
+
+func multiRoutesMenu(input io.Reader, urls []string) string {
+	if len(urls) == 1 {
+		return urls[0]
+	} else {
+		var choice int
+		fmt.Println("Multiple routes detected. Please choose one: ")
+		for u := 0; u < len(urls); u++ {
+			fmt.Printf("%d - %s\n", u+1, urls[u])
+		}
+		fmt.Print("Enter route to open: ")
+		fmt.Fscanf(input, "%d", &choice)
+		for !(choice >= 1 && choice <= len(urls)) {
+			fmt.Printf("Please enter valid number(1 to %d): ", len(urls))
+			fmt.Fscanf(input, "%d", &choice)
+		}
+		return urls[choice-1]
+	}
 }
 
 func (plugin OpenPlugin) runServiceOpen(cliConnection plugin.CliConnection, args []string) {
