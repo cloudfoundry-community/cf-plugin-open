@@ -44,7 +44,7 @@ func (plugin OpenPlugin) Run(cliConnection plugin.CliConnection, args []string) 
 func (OpenPlugin) GetMetadata() plugin.PluginMetadata {
 	return plugin.PluginMetadata{
 		Name:    "open",
-		Version: plugin.VersionType{Major: 1, Minor: 0},
+		Version: plugin.VersionType{Major: 1, Minor: 1, Build: 0},
 		Commands: []plugin.Command{
 			{
 				Name:     "open",
