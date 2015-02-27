@@ -70,8 +70,7 @@ func (plugin OpenPlugin) runAppOpen(cliConnection plugin.CliConnection, args []s
 		fmt.Fprintln(os.Stdout, "error: app does not exist")
 		os.Exit(1)
 	}
-	var url []string
-	url, err = getUrlFromOutput(output)
+	url, err := getUrlFromOutput(output)
 	if err != nil {
 		fmt.Fprintln(os.Stdout, "error: ", err)
 		os.Exit(1)
@@ -83,13 +82,12 @@ func (plugin OpenPlugin) runAppOpen(cliConnection plugin.CliConnection, args []s
 
 func getUrlFromOutput(output []string) ([]string, error) {
 	urls := []string{}
-	var url string
 	for _, line := range output {
 		splitLine := strings.Split(strings.TrimSpace(line), " ")
 		if splitLine[0] == "urls:" {
 			if len(splitLine) > 1 {
 				for p := 1; p < len(splitLine); p++ {
-					url = "http://" + strings.Trim(splitLine[p], ",")
+					url := "http://" + strings.Trim(splitLine[p], ",")
 					url = strings.TrimSpace(url)
 					urls = append(urls, url)
 				}
