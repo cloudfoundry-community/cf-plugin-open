@@ -8,7 +8,7 @@ Installation
 
 ```
 $ go get github.com/cloudfoundry-community/cf-plugin-open
-$ cf install-plugin $GOPATH/bin/open
+$ cf install-plugin $GOPATH/bin/cf-plugin-open
 ```
 
 Usage
