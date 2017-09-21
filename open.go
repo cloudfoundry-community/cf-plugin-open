@@ -20,7 +20,19 @@ type serviceInstance struct {
 	DashboardURL string `json:"dashboard_url"`
 }
 
+var Version = ""
+
 func main() {
+	if len(os.Args) > 1 {
+		if os.Args[1] == "-v" || os.Args[1] == "--version" {
+			if Version == "" {
+				fmt.Printf("cf-plugin-open (development)\n")
+			} else {
+				fmt.Printf("cf-plugin-open v%s\n", Version)
+			}
+			os.Exit(0)
+		}
+	}
 	plugin.Start(&OpenPlugin{})
 }
 
