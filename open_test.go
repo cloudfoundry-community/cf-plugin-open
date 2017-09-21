@@ -1,15 +1,15 @@
 package main
 
 import (
-	"testing"
 	"strings"
+	"testing"
 
-	"github.com/cloudfoundry/cli/plugin/fakes"
+	"code.cloudfoundry.org/cli/plugin/pluginfakes"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 var (
-	cliConn *fakes.FakeCliConnection
+	cliConn *pluginfakes.FakeCliConnection
 )
 
 func TestNoApp(t *testing.T) {
@@ -78,5 +78,5 @@ func TestRoutesMenu(t *testing.T) {
 }
 
 func setup() {
-	cliConn = &fakes.FakeCliConnection{}
+	cliConn = &pluginfakes.FakeCliConnection{}
 }
