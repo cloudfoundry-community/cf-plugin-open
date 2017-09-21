@@ -87,7 +87,7 @@ func getUrlFromOutput(output []string) ([]string, error) {
 		if splitLine[0] == "urls:" {
 			if len(splitLine) > 1 {
 				for p := 1; p < len(splitLine); p++ {
-					url := "http://" + strings.Trim(splitLine[p], ",")
+					url := "https://" + strings.Trim(splitLine[p], ",")
 					url = strings.TrimSpace(url)
 					urls = append(urls, url)
 				}

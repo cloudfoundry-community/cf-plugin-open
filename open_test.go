@@ -40,7 +40,7 @@ func TestNoRoutes(t *testing.T) {
 		input := []string{"urls: google.com"}
 		out, err := getUrlFromOutput(input)
 		So(err, ShouldBeNil)
-		So(out[0], ShouldEqual, "http://google.com")
+		So(out[0], ShouldEqual, "https://google.com")
 	})
 
 	Convey("getUrlFromOuput should return error if no route exists", t, func() {
@@ -54,26 +54,26 @@ func TestNoRoutes(t *testing.T) {
 		input := []string{"urls: google.com, apple.com, github.com"}
 		out, err := getUrlFromOutput(input)
 		So(err, ShouldBeNil)
-		So(out[0], ShouldEqual, "http://google.com")
-		So(out[1], ShouldEqual, "http://apple.com")
-		So(out[2], ShouldEqual, "http://github.com")
+		So(out[0], ShouldEqual, "https://google.com")
+		So(out[1], ShouldEqual, "https://apple.com")
+		So(out[2], ShouldEqual, "https://github.com")
 	})
 }
 
 func TestRoutesMenu(t *testing.T) {
 	Convey("multiRoutesMenu should return url if there is one route", t, func() {
-		input := []string{"http://google.com"}
-		So(multiRoutesMenu(strings.NewReader(""), input), ShouldEqual, "http://google.com")
+		input := []string{"https://google.com"}
+		So(multiRoutesMenu(strings.NewReader(""), input), ShouldEqual, "https://google.com")
 	})
 
 	Convey("multiRoutesMenu should return 1nd url if first route is chosen", t, func() {
-		input := []string{"http://google.com", "http://apple.com"}
-		So(multiRoutesMenu(strings.NewReader("1"), input), ShouldEqual, "http://google.com")
+		input := []string{"https://google.com", "https://apple.com"}
+		So(multiRoutesMenu(strings.NewReader("1"), input), ShouldEqual, "https://google.com")
 	})
 
 	Convey("multiRoutesMenu should return 2nd url if second route is chosen", t, func() {
-		input := []string{"http://google.com", "http://apple.com"}
-		So(multiRoutesMenu(strings.NewReader("2"), input), ShouldEqual, "http://apple.com")
+		input := []string{"https://google.com", "https://apple.com"}
+		So(multiRoutesMenu(strings.NewReader("2"), input), ShouldEqual, "https://apple.com")
 	})
 }
 
