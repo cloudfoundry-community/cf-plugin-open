@@ -1,4 +1,5 @@
 meta:
+  name: open
   github: https://github.com/cloudfoundry-community/cf-plugin-open
   version: (( params "Need version of plugin" ))
   updated: (( params "Need current time/date" ))
@@ -14,9 +15,10 @@ meta:
     url: (( concat meta.github "/releases/download/v" meta.version "/cf-plugin-open-darwin-amd64" ))
 
 plugins:
-- name: open
-  version: (( grab meta.version ))
-  updated: (( grab meta.updated ))
+- (( merge on name ))
+- name:     (( grab meta.name ))
+  version:  (( grab meta.version ))
+  updated:  (( grab meta.updated ))
   homepage: (( grab meta.github ))
   binaries: (( grab meta.binaries ))
   description: Open App URLs + Service dashboards in browser

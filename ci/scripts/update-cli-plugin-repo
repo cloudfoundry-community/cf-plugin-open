@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+NAME=$(spruce json git/ci/plugin-defn.yml | jq -r ".meta.name")
+VERSION=$(cat version/number)
+
+git clone cli-plugin-repo pullrequest-repo
+
+cat > release.yml <<YAML
+meta:
+  version: $(cat version/number)
+  updated: $(date '+%Y-%m-%dT00:00:00')Z
+  binaries:
+  - platform: win64
+    checksum: $(sha1sum github/*windows-amd64.exe | awk '{print $1}')
+  - platform: linux64
+    checksum: $(sha1sum github/*linux-amd64 | awk '{print $1}')
+  - platform: osx
+    checksum: $(sha1sum github/*darwin-amd64 | awk '{print $1}')
+YAML
+
+spruce merge --prune meta cli-plugin-repo/repo-index.yml git/ci/plugin-defn.yml release.yml > updated-repo-index.yml
+cp updated-repo-index.yml pullrequest-repo/repo-index.yml
+
+# GIT!
+if [[ -z $(git config --global user.email) ]]; then
+  git config --global user.email "ci@starkandwayne.com"
+fi
+if [[ -z $(git config --global user.name) ]]; then
+  git config --global user.name "CI Bot"
+fi
+
+(cd pullrequest-repo
+ git add -A
+ git status
+ git commit -m "Update ${NAME} plugin v${VERSION}")
+
+exit 1

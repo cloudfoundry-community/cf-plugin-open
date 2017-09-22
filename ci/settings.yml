@@ -43,8 +43,8 @@ jobs:
             - { get: version, passed: [shipit] }
             - { get: github,  passed: [shipit] }
             - { get: cli-plugin-repo }
-        - name: prepare-pull-request
-          task: prepare-pull-request
+        - name: update-cli-plugin-repo
+          task: update-cli-plugin-repo
           config:
             platform: linux
             image_resource:
@@ -57,10 +57,18 @@ jobs:
               - name: version
               - name: github
               - name: cli-plugin-repo
+            outputs:
+              - name: pullrequest-repo
             run:
-              path: git/ci/scripts/pull-request
+              path: git/ci/scripts/update-cli-plugin-repo
               args: []
             params: {}
+        - name: cli-plugin-repo-pullrequests
+          put: cli-plugin-repo-pullrequests
+          params:
+            repository: pullrequest-repo
+            force: true
+
 
 resources:
   - name: cli-plugin-repo
@@ -68,9 +76,10 @@ resources:
     source:
       uri:    https://github.com/cloudfoundry-incubator/cli-plugin-repo
       branch: master
-  #
-  # - name: cli-plugin-repo-pullrequests
-  #   type: git
-  #   source:
-  #     uri:    https://github.com/cloudfoundry-incubator/cli-plugin-repo
-  #     branch: master
+
+  - name: cli-plugin-repo-pullrequests
+    type: git
+    source:
+      uri:    git@github.com:starkandwayne/cf-cli-plugin-repo.git
+      branch: (( concat meta.name "-release" ))
+      private_key: (( grab meta.github.private_key ))
