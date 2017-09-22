@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"code.cloudfoundry.org/cli/plugin"
@@ -54,9 +56,21 @@ func (plugin OpenPlugin) Run(cliConnection plugin.CliConnection, args []string) 
 
 // GetMetadata of plugin
 func (OpenPlugin) GetMetadata() plugin.PluginMetadata {
+	version := plugin.VersionType{Major: 0, Minor: 0, Build: 0}
+	versionRE := regexp.MustCompile("([0-9]+).([0-9]+).([0-9]+)")
+	versionParts := versionRE.FindStringSubmatch(Version)
+	if len(versionParts) == 4 {
+		var part int64
+		part, _ = strconv.ParseInt(versionParts[1], 10, 32)
+		version.Major = int(part)
+		part, _ = strconv.ParseInt(versionParts[2], 10, 32)
+		version.Minor = int(part)
+		part, _ = strconv.ParseInt(versionParts[3], 10, 32)
+		version.Build = int(part)
+	}
 	return plugin.PluginMetadata{
 		Name:    "open",
-		Version: plugin.VersionType{Major: 1, Minor: 1, Build: 0},
+		Version: version,
 		Commands: []plugin.Command{
 			{
 				Name:     "open",
