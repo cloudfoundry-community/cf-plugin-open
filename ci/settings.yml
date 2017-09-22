@@ -32,7 +32,7 @@ groups:
 
 jobs:
   - name: publish-plugin
-    public: true
+    public: false
     serial: true
     plan:
       - do:
