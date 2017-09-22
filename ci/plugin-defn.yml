@@ -1,0 +1,34 @@
+meta:
+  github: https://github.com/cloudfoundry-community/cf-plugin-open
+  version: (( params "Need version of plugin" ))
+  updated: (( params "Need current time/date" ))
+  binaries:
+  - platform: win64
+    checksum: (( params "Need win64 checksum" ))
+    url: (( concat meta.github "/releases/download/v" meta.version "/cf-plugin-open-windows-amd64.exe" ))
+  - platform: linux64
+    checksum: (( params "Need linux64 checksum" ))
+    url: (( concat meta.github "/releases/download/v" meta.version "/cf-plugin-open-linux-amd64" ))
+  - platform: osx
+    checksum: (( params "Need osx checksum" ))
+    url: (( concat meta.github "/releases/download/v" meta.version "/cf-plugin-open-darwin-amd64" ))
+
+plugins:
+- name: open
+  version: (( grab meta.version ))
+  updated: (( grab meta.updated ))
+  homepage: (( grab meta.github ))
+  binaries: (( grab meta.binaries ))
+  description: Open App URLs + Service dashboards in browser
+  company: Stark and Wayne
+  created: 2015-02-27T00:00:00Z
+  authors:
+  - contact: long@starkandwayne.com
+    homepage: http://lnguyen.io
+    name: Long Nguyen
+  - contact: drnic@starkandwayne.com
+    homepage: http://drnicwilliams.com
+    name: Dr Nic Williams
+  - contact: vnguyen@starkandwayne.com
+    homepage: https://github.com/soutenniza
+    name: Van Nguyen

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+cat > release.yml <<YAML
+meta:
+  version: $(cat version/number)
+  updated: $(date '+%Y-%m-%dT%H:%M:%SZ')
+  binaries:
+  - platform: win64
+    checksum: $(sha1sum github/*windows-amd64.exe | awk '{print $1}')
+  - platform: linux64
+    checksum: $(sha1sum github/*linux-amd64 | awk '{print $1}')
+  - platform: osx
+    checksum: $(sha1sum github/*darwin-amd64 | awk '{print $1}')
+YAML
+
+spruce merge --prune meta cli-plugin-repo/repo-index.yml git/ci/plugin-defn.yml release.yml > updated-repo-index.yml
+cp updated-repo-index.yml cli-plugin-repo/repo-index.yml
+
+cd cli-plugin-repo
+
+export TERM=ansi
+git diff
