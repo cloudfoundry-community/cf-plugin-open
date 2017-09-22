@@ -17,6 +17,9 @@ meta:
   target:   (( param "Please identify the name of the target Concourse CI" ))
   pipeline: (( grab meta.name ))
 
+  shipit:
+    targets: "linux/amd64 darwin/amd64"
+
   go:
     version: 1.8
     module:  (( concat "github.com/" meta.github.owner "/" meta.github.repo ))
@@ -259,6 +262,7 @@ jobs:
               BRANCH:       (( grab meta.github.branch ))
               CMD_PKG:      (( grab meta.go.cmd_module ))
               STATIC_BINARY: (( grab meta.go.force_static_binary ))
+              TARGETS:       (( grab meta.shipit.targets ))
         - name: version
           put: version
           params: { bump: final }
