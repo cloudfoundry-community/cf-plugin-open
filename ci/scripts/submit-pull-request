@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+: ${BASE_ORG_REPO:-required}
+: ${BASE_BRANCH:-required}
+: ${PR_ORG:-required}
+: ${PR_BRANCH:-required}
+: ${GITHUB_TOKEN:-required}
+
+NAME=$(spruce json git/ci/plugin-defn.yml | jq -r ".meta.name")
+VERSION=$(cat version/number)
+
+curl -H "Authorization: token ${GITHUB_TOKEN}" \
+  https://api.github.com/repos/${BASE_ORG_REPO}/pulls -X POST \
+  -d "{\"title\":\"Update ${NAME} plugin v${VERSION}\", \"head\":\"${PR_ORG}:${PR_BRANCH}\", \"base\":\"${BASE_BRANCH}\", \"maintainer_can_modify\":true}"

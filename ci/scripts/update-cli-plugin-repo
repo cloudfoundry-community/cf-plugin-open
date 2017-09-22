@@ -20,8 +20,8 @@ meta:
     checksum: $(sha1sum github/*darwin-amd64 | awk '{print $1}')
 YAML
 
-spruce merge --prune meta cli-plugin-repo/repo-index.yml git/ci/plugin-defn.yml release.yml > updated-repo-index.yml
-cp updated-repo-index.yml pullrequest-repo/repo-index.yml
+spruce merge --prune meta git/ci/plugin-defn.yml release.yml > plugin.yml
+spruce merge cli-plugin-repo/repo-index.yml plugin.yml > pullrequest-repo/repo-index.yml
 
 # GIT!
 if [[ -z $(git config --global user.email) ]]; then
@@ -35,5 +35,3 @@ fi
  git add -A
  git status
  git commit -m "Update ${NAME} plugin v${VERSION}")
-
-exit 1
