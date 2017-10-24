@@ -61,6 +61,17 @@ gox -osarch="${TARGETS}" --output="artifacts/${BINARY}-{{.OS}}-{{.Arch}}" -ldfla
 go build -o "${BINARY}" -ldflags="-X main.Version=${VERSION}" ${CMD_PKG:-.}
 ./${BINARY} -v
 
+(apt-get update && apt-get install -y openjdk-8-jdk) &>/dev/null
+
+pushd artifacts
+for file in *
+do
+  zip -m ${file}.zip ${file}
+  jarsigner -tsa http://timestamp.digicert.com -keystore "${JKS}" -storepass "${STORE_PASS}" -keypass "${KEY_PASS}" ${file}.zip "key from www.digicert.com"
+  zip -d ${file}.zip 'META-INF/*' > /dev/null 2>&1
+done
+popd
+
 ls artifacts/* | xargs -L1 sha1sum
 popd
 

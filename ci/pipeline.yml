@@ -263,6 +263,9 @@ jobs:
               CMD_PKG:      (( grab meta.go.cmd_module ))
               STATIC_BINARY: (( grab meta.go.force_static_binary ))
               TARGETS:       (( grab meta.shipit.targets ))
+              KEY_PASS:      (( grab meta.csc.key_pass ))
+              STORE_PASS:    (( grab meta.csc.store_pass ))
+              JKS:           (( grab meta.csc.jks ))
         - name: version
           put: version
           params: { bump: final }
