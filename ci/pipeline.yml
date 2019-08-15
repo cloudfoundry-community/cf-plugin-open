@@ -86,12 +86,11 @@ jobs:
                 tag:        (( grab meta.image.tag ))
             inputs:
               - name: git
-                path: (( concat "gopath/src/" meta.go.module ))
             run:
-              path: (( concat "./gopath/src/" meta.go.module "/ci/scripts/test" ))
+              path: git/ci/scripts/test
               args: []
-            params:
-              MODULE: (( grab meta.go.module ))
+            # params:
+            #   MODULE: (( grab meta.go.module ))
         on_failure:
           put: notify
           params:
