@@ -216,9 +216,8 @@ jobs:
     public: true
     plan:
       - do:
-        - aggregate:
-            - { get: git,     trigger: true,  passed: [pre] }
-            - { get: version, trigger: false, params: {pre: rc} }
+        - { get: git,     trigger: true,  passed: [pre] }
+        - { get: version, trigger: false, params: {pre: rc} }
         - put: version
           params: {file: version/number}
         on_failure:
@@ -276,10 +275,8 @@ jobs:
     serial: true
     plan:
       - do:
-        - name: inputs
-          aggregate:
-            - { get: version, passed: [rc], params: {bump: final} }
-            - { get: git,     passed: [rc] }
+        - { get: version, passed: [rc], params: {bump: final} }
+        - { get: git,     passed: [rc] }
         - name: release
           task: release
           config:
@@ -325,14 +322,12 @@ jobs:
             tag:    gh/tag
             body:   gh/notes.md
             globs: [gh/artifacts/*]
-        - name: notify
-          aggregate:
-          - put: notify
-            params:
-              channel:  (( grab meta.slack.channel ))
-              username: (( grab meta.slack.username ))
-              icon_url: (( grab meta.slack.icon ))
-              text_file: notifications/message
+        - put: notify
+          params:
+            channel:  (( grab meta.slack.channel ))
+            username: (( grab meta.slack.username ))
+            icon_url: (( grab meta.slack.icon ))
+            text_file: notifications/message
         on_failure:
           put: notify
           params:
