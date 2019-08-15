@@ -72,7 +72,6 @@ groups:
 jobs:
   - name: test
     public: true
-    serial: true
     plan:
       - do:
         - { get: git, trigger: true }
@@ -101,7 +100,6 @@ jobs:
 
   - name: test-pr
     public: true
-    serial: true
     plan:
       - do:
         - { get: git-pull-requests, trigger: true, version: every }
