@@ -22,15 +22,15 @@ plugins:
   homepage: (( grab meta.github ))
   binaries: (( grab meta.binaries ))
   description: Open App URLs + Service dashboards in browser
-  company: Stark and Wayne
+  company: Stark & Wayne
   created: 2015-02-27T00:00:00Z
   authors:
-  - contact: long@starkandwayne.com
-    homepage: http://lnguyen.io
-    name: Long Nguyen
   - contact: drnic@starkandwayne.com
     homepage: http://drnicwilliams.com
     name: Dr Nic Williams
+  - contact: long@starkandwayne.com
+    homepage: http://lnguyen.io
+    name: Long Nguyen
   - contact: vnguyen@starkandwayne.com
     homepage: https://github.com/soutenniza
     name: Van Nguyen
