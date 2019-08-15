@@ -23,6 +23,12 @@ YAML
 spruce merge --prune meta git/ci/plugin-defn.yml release.yml > plugin.yml
 spruce merge cli-plugin-repo/repo-index.yml plugin.yml > pullrequest-repo/repo-index.yml
 
+(
+  cd pullrequest-repo
+  go get -u code.cloudfoundry.org/cli-plugin-repo
+  go run sort/main.go repo-index.yml
+)
+
 # GIT!
 if [[ -z $(git config --global user.email) ]]; then
   git config --global user.email "ci@starkandwayne.com"
