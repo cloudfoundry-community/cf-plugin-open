@@ -6,6 +6,7 @@ require (
 	code.cloudfoundry.org/cli v6.46.0+incompatible
 	github.com/gopherjs/gopherjs v0.0.0-20190812055157-5d271430af9f // indirect
 	github.com/jtolds/gls v4.20.0+incompatible
+	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/skratchdot/open-golang v0.0.0-20160302144031-75fb7ed4208c
