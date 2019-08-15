@@ -38,8 +38,8 @@ jobs:
       - do:
         - { get: git }
         # - { get: git,     passed: [shipit] }
-        - { get: version, passed: [shipit] }
-        - { get: github,  passed: [shipit] }
+        - { get: version, passed: [shipit], trigger: true }
+        - { get: github,  passed: [shipit], trigger: true }
         - { get: cli-plugin-repo }
         - name: update-cli-plugin-repo
           task: update-cli-plugin-repo
