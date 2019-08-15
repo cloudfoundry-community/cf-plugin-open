@@ -22,8 +22,6 @@ meta:
 
   go:
     version: 1.12
-    module:  (( concat "github.com/" meta.github.owner "/" meta.github.repo ))
-    cmd_module: (( grab meta.go.module ))
     binary:  (( grab meta.github.repo ))
     force_static_binary: false
 
@@ -89,8 +87,6 @@ jobs:
             run:
               path: git/ci/scripts/test
               args: []
-            # params:
-            #   MODULE: (( grab meta.go.module ))
         on_failure:
           put: notify
           params:
@@ -118,12 +114,10 @@ jobs:
                 tag:        (( grab meta.image.tag ))
             inputs:
               - name: git-pull-requests
-                path: (( concat "gopath/src/" meta.go.module ))
+                path: git
             run:
-              path: (( concat "./gopath/src/" meta.go.module "/ci/scripts/test" ))
+              path: git/ci/scripts/test
               args: []
-            params:
-              MODULE: (( grab meta.go.module ))
           on_success:
             put: git-pull-requests
             params:
@@ -289,22 +283,20 @@ jobs:
             inputs:
               - name: version
               - name: git
-                path: (( concat "gopath/src/" meta.go.module ))
             outputs:
               - name: gh
               - name: pushme
             run:
-              path: (( concat "./gopath/src/" meta.go.module "/ci/scripts/shipit" ))
+              path: git/ci/scripts/shipit
               args: []
             params:
               BINARY:       (( grab meta.go.binary ))
-              REPO_ROOT:    (( concat "gopath/src/" meta.go.module ))
+              REPO_ROOT:    git
               VERSION_FROM: version/number
               RELEASE_NAME: (( grab meta.release ))
               RELEASE_ROOT: gh
               REPO_OUT:     pushme
               BRANCH:       (( grab meta.github.branch ))
-              CMD_PKG:      (( grab meta.go.cmd_module ))
               STATIC_BINARY: (( grab meta.go.force_static_binary ))
               TARGETS:       (( grab meta.shipit.targets ))
         - name: version
