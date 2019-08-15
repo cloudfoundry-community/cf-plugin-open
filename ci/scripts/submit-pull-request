@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eu
 
 : ${BASE_ORG_REPO:-required}
 : ${BASE_BRANCH:-required}
@@ -11,6 +11,7 @@ set -e
 NAME=$(spruce json git/ci/plugin-defn.yml | jq -r ".meta.name")
 VERSION=$(cat version/number)
 
-curl -H "Authorization: token ${GITHUB_TOKEN}" \
+curl -vL -H "Authorization: token ${GITHUB_TOKEN}" \
+        -H "Accept: application/vnd.github.v3+json" \
   https://api.github.com/repos/${BASE_ORG_REPO}/pulls -X POST \
-  -d "{\"title\":\"Update ${NAME} plugin v${VERSION}\", \"head\":\"${PR_ORG}:${PR_BRANCH}\", \"base\":\"${BASE_BRANCH}\", \"maintainer_can_modify\":true}"
+        -d "{\"title\":\"Update ${NAME} plugin v${VERSION}\", \"head\":\"${PR_ORG}:${PR_BRANCH}\", \"base\":\"${BASE_BRANCH}\", \"maintainer_can_modify\":true}"
